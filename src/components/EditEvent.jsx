@@ -31,12 +31,19 @@ function EditEvent() {
     setEventData({ ...eventData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-   
-    console.log(eventData);
+    try {
+      const response = await axios.post('http://localhost:', formData);
+      console.log(response.data); 
+      alert('logged in succesfully');
+    } catch (error) {
+      console.error(error);
+      setError('Invalid email or password');
+    }
   };
 
+  
   return (
     <div>
       <Typography variant="h4" gutterBottom>

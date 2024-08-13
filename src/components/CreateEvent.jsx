@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography } from '@mui/material';
-
+import axios from 'axios'
 function CreateEvent() {
   const [eventData, setEventData] = useState({
     name: '',
@@ -8,20 +8,28 @@ function CreateEvent() {
     time: '',
     location: '',
     description: '',
-    minSize:'',
-    maxSize:'',
     
+
   });
 
   const handleChange = (e) => {
     setEventData({ ...eventData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+   const handleSubmit = async (e) => {
     e.preventDefault();
-   
-    console.log(eventData);
+    try {
+      const response = await axios.post('http://localhost:8080/admin/addEvent', eventData,{
+  withCredentials: true
+});
+      console.log(response.data); 
+      alert('logged in succesfully');
+    } catch (error) {
+      console.error(error);
+ 
+    }
   };
+
 
   return (
     <div>
@@ -75,24 +83,7 @@ function CreateEvent() {
           fullWidth
           margin="normal"
         />
-         <TextField
-          label="max size "
-          type='number'
-          name="name"
-          value={eventData.maxSize}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-         <TextField
-          label="min size"
-          name="name"
-          type ='number'
-          value={eventData.minSize}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
+         
         <Button type="submit" variant="contained" color="primary">
           Create
         </Button>
