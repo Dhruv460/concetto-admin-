@@ -1,9 +1,12 @@
 const eventsModel = require("../models/events");
+const notificationModel = require("../models/notification");
 
 const addEvent = async (req, res) => {
     try {
         let event = await eventsModel.create(req.body)
         res.status(200).send({ success: "Event added",event})
+       await notificationModel.create({body:event._id})
+
     } catch (err) {
         console.log(err);
         if (err.name === 'ValidationError') {
@@ -23,6 +26,7 @@ const updateEvent = async (req, res) => {
     const { eventName, participants, type, description, rounds, guidlines, contact, maxTeamSize, minTeamSize } = req.body
         let change = false
         let prevEventData = await eventsModel.findOne({ eventName })
+        await notificationModel.create({body:prevEventData._id})
 
         if (participants && prevEventData.participants !== participants) {
             prevEventData.participants = participants
@@ -70,7 +74,8 @@ const updateEvent = async (req, res) => {
 }
 
 const deleteEvent = async (req, res) => {
-     await eventsModel.findOneAndDelete({ eventName: req.body.eventName })
+     const deletedEvent  = await eventsModel.findOneAndDelete({ eventName: req.body.eventName })
+     await notificationModel.create({body:deletedEvent._id})
     res.status(200).send({ success: "Event deleted successfully" })
 }
 

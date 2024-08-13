@@ -3,9 +3,9 @@ const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Schema.Types
 
 const notificationSchema = new mongoose.Schema({
-    time:{type:Date,required:true},
-    creator:{type:String},
-    body:{type:String}
-});
+    body:{type:ObjectId}
+},{timestamps:true});
 
-module.exports = mongoose.model("Notifications", notificationSchema);
+const notificationModel = mongoose.model("Notifications", notificationSchema);
+
+module.exports = notificationModel;
