@@ -1,1 +1,0 @@
-#403- forbidden => unverified user tries to access the protected route 

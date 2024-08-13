@@ -3,32 +3,33 @@ import { TextField, Button, Typography } from '@mui/material';
 import axios from 'axios'
 function CreateEvent() {
   const [eventData, setEventData] = useState({
-    name: '',
+    eventName: '',
     date: '',
     time: '',
     location: '',
     description: '',
-    
+    type: '',
 
   });
 
   const handleChange = (e) => {
     setEventData({ ...eventData, [e.target.name]: e.target.value });
   };
-
-   const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(eventData); 
     try {
-      const response = await axios.post('http://localhost:8080/admin/addEvent', eventData,{
-  withCredentials: true
-});
-      console.log(response.data); 
-      alert('logged in succesfully');
+        const response = await axios.post('/api/admin/addEvent', eventData, {
+            withCredentials: true
+        });
+        console.log(response.data);
+        alert('Event created successfully');
     } catch (error) {
-      console.error(error);
- 
+        console.error(error);
+        alert(error.response?.data?.message || 'Error creating event');
     }
-  };
+};
+
 
 
   return (
@@ -39,7 +40,7 @@ function CreateEvent() {
       <form onSubmit={handleSubmit}>
         <TextField
           label="Event Name"
-          name="name"
+          name="eventName"
           value={eventData.name}
           onChange={handleChange}
           fullWidth
