@@ -1,12 +1,13 @@
 require('dotenv').config()
 const express = require('express');
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 8080;
 const bodyParser = require('body-parser');
 const createError = require('http-errors');
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const auth = require("./routes/auth");
 const campusAmbassador = require("./routes/campusAmbassador");
+const cors = require('cors')
 const app = express();
 
 
@@ -29,6 +30,12 @@ app.use("/" , campusAmbassador);
 app.use("/register",require('./routes/register'))
 app.use("/admin",require('./routes/admin'))
 
+app.use(cors({
+  
+  origin:"*",
+
+
+}))
 
 app.use((err ,req , res , next) => {
     const {message , statusCode} = err;

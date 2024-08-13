@@ -79,4 +79,17 @@ const deleteEvent = async (req, res) => {
     res.status(200).send({ success: "Event deleted successfully" })
 }
 
-module.exports = { addEvent,updateEvent,deleteEvent}
+ const getEvents = async (req, res) => {
+  try {
+    const Events = await eventsModel.find();
+    res.json(Events);
+    // console.log(projects);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error:' });
+  }
+};
+
+
+
+module.exports = { addEvent,updateEvent,deleteEvent,getEvents}
