@@ -6,7 +6,7 @@ function CreateEvent() {
   const [eventData, setEventData] = useState({
     eventName: '',
     description: '',
-    rounds: '',
+   
     guidelines: '',
     contact: {
       name: '',
@@ -67,12 +67,12 @@ function CreateEvent() {
     }
 
 
-    if (isNaN(eventData.rounds) || eventData.rounds <= 0) {
-      newErrors.rounds = 'Rounds must be a positive number.';
-      valid = false;
-    } else {
-      newErrors.rounds = '';
-    }
+    // if (isNaN(eventData.rounds) || eventData.rounds <= 0) {
+    //   newErrors.rounds = 'Rounds must be a positive number.';
+    //   valid = false;
+    // } else {
+    //   newErrors.rounds = '';
+    // }
 
     setErrors(newErrors);
     return valid;
@@ -96,7 +96,7 @@ function CreateEvent() {
       setEventData({
         eventName: '',
         description: '',
-        rounds: '',
+     
         guidelines: '',
         contact: {
           name: '',
@@ -109,7 +109,7 @@ function CreateEvent() {
         venue: ''
       });
       setErrors({
-        rounds: '',
+      
         eventStartTime: '',
         eventEndTime: ''
       });
@@ -145,7 +145,7 @@ function CreateEvent() {
           margin="normal"
           required
         />
-        <TextField
+        {/* <TextField
           label="Rounds"
           name="rounds"
           type="number"
@@ -155,7 +155,7 @@ function CreateEvent() {
           margin="normal"
           error={!!errors.rounds}
           helperText={errors.rounds}
-        />
+        /> */}
         <TextField
           label="Guidelines"
           name="guidelines"
@@ -223,7 +223,7 @@ function CreateEvent() {
           InputLabelProps={{ shrink: true }}
           fullWidth
           margin="normal"
-          required
+        
           error={!!errors.eventEndTime}
           helperText={errors.eventEndTime}
         />

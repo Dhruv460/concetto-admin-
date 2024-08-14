@@ -45,7 +45,7 @@ function EventList() {
     setOpen(true);
   };
 
- const handleDeleteConfirm = async () => {
+const handleDeleteConfirm = async () => {
   try {
     await axios.delete(`/api/admin/deleteEvent`, {
       data: { eventName: selectedEvent.eventName }
@@ -145,6 +145,13 @@ function EventList() {
                     <strong>Min Team Size:</strong> {event.minTeamSize}
                   </Typography>
                 )}
+
+ {event.rounds != null && (
+                  <Typography variant="body2" component="p">
+                    <strong> No. of rounds:</strong> {event.rounds}
+                  </Typography>
+                )}
+
                 {event.eventStartTime && (
                   <Typography variant="body2" component="p">
                     <strong>Event Start Time:</strong> {event.eventStartTime}
