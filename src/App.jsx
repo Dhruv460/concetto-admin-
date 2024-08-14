@@ -5,7 +5,7 @@ import Dashboard from './components/Dashbboard.jsx';
 import CreateEvent from './components/CreateEvent.jsx';
 import EditEvent from './components/EditEvent.jsx';
 import EventList from './components/EventList.jsx'
-
+import DeleteEvent from './components/DeleteEvent.jsx';
 function App() {
   return (
     <Router>
@@ -15,8 +15,10 @@ function App() {
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/create" element={<CreateEvent />} />
-            <Route path="/edit/:id" element={<EditEvent />} />
+            {/* <Route path="/edit/:id" element={<EditEvent />} /> */}
             <Route path="/events" element={<EventList />} />
+                    <Route path="/events/edit/:eventId" element={<EditEvent />} />
+        <Route path="/events/delete/:eventId" element={<DeleteEvent />} />
           </Routes>
         </div>
       </div>

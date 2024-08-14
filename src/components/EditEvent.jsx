@@ -1,107 +1,193 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Typography } from '@mui/material';
-import { useParams } from 'react-router-dom';
+import { Button, TextField, Typography, Box, CircularProgress, Grid } from '@mui/material';
+import axios from 'axios';
+import { useParams, useNavigate } from 'react-router-dom';
 
-function EditEvent() {
-  const { id } = useParams();
+const EditEvent = () => {
+  const { eventId } = useParams();
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [eventData, setEventData] = useState({
-    name: '',
-    date: '',
-    time: '',
-    location: '',
+    eventName: '',
     description: '',
+    rounds: '',
+    guidelines: '',
+    contact: { name: '', contact: '' },
+    maxTeamSize: '',
+    minTeamSize: '',
+    eventStartTime: '',
+    eventEndTime: '',
+    venue: ''
   });
 
   useEffect(() => {
-   
-    const fetchEventData = async () => {
-      const fetchedData = {
-        name: 'Sample Event',
-        date: '2024-08-20',
-        time: '14:00',
-        location: 'Auditorium',
-        description: 'This is a sample event description.',
-      };
-      setEventData(fetchedData);
+    const fetchEvent = async () => {
+      try {
+        const response = await axios.get(`/api/admin/getEvent/${eventId}`);
+        setEventData(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching event:', error);
+        setLoading(false);
+      }
     };
-    fetchEventData();
-  }, [id]);
+
+    fetchEvent();
+  }, [eventId]);
 
   const handleChange = (e) => {
-    setEventData({ ...eventData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setEventData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:', formData);
-      console.log(response.data); 
-      alert('logged in succesfully');
+      await axios.put(`/api/admin/updateEvent/${eventId}`, eventData);
+      navigate('/events');
     } catch (error) {
-      console.error(error);
-      setError('Invalid email or password');
+      console.error('Error updating event:', error);
     }
   };
 
-  
+  if (loading) {
+    return <CircularProgress />;
+  }
+
   return (
-    <div>
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
       <Typography variant="h4" gutterBottom>
         Edit Event
       </Typography>
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Event Name"
-          name="name"
-          value={eventData.name}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Date"
-          name="date"
-          type="date"
-          value={eventData.date}
-          onChange={handleChange}
-          InputLabelProps={{ shrink: true }}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Time"
-          name="time"
-          type="time"
-          value={eventData.time}
-          onChange={handleChange}
-          InputLabelProps={{ shrink: true }}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Location"
-          name="location"
-          value={eventData.location}
-          onChange={handleChange}
-          fullWidth
-          margin="normal"
-        />
-        <TextField
-          label="Description"
-          name="description"
-          value={eventData.description}
-          onChange={handleChange}
-          multiline
-          rows={4}
-          fullWidth
-          margin="normal"
-        />
-        <Button type="submit" variant="contained" color="primary">
-          Update
-        </Button>
-      </form>
-    </div>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Event Name"
+            name="eventName"
+            value={eventData.eventName}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Description"
+            name="description"
+            multiline
+            rows={4}
+            value={eventData.description}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Rounds"
+            name="rounds"
+            value={eventData.rounds}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Guidelines"
+            name="guidelines"
+            value={eventData.guidelines}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Contact Name"
+            name="contact.name"
+            value={eventData.contact.name}
+            onChange={(e) =>
+              setEventData((prevData) => ({
+                ...prevData,
+                contact: { ...prevData.contact, name: e.target.value },
+              }))
+            }
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Contact Info"
+            name="contact.contact"
+            value={eventData.contact.contact}
+            onChange={(e) =>
+              setEventData((prevData) => ({
+                ...prevData,
+                contact: { ...prevData.contact, contact: e.target.value },
+              }))
+            }
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            label="Max Team Size"
+            name="maxTeamSize"
+            type="number"
+            value={eventData.maxTeamSize}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField
+            fullWidth
+            label="Min Team Size"
+            name="minTeamSize"
+            type="number"
+            value={eventData.minTeamSize}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Event Start Time"
+            name="eventStartTime"
+            type="datetime-local"
+            value={eventData.eventStartTime}
+            onChange={handleChange}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Event End Time"
+            name="eventEndTime"
+            type="datetime-local"
+            value={eventData.eventEndTime}
+            onChange={handleChange}
+            InputLabelProps={{ shrink: true }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Venue"
+            name="venue"
+            value={eventData.venue}
+            onChange={handleChange}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Button type="submit" variant="contained" color="primary">
+            Update Event
+          </Button>
+        </Grid>
+      </Grid>
+    </Box>
   );
-}
+};
 
 export default EditEvent;
