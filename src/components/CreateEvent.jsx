@@ -22,6 +22,7 @@ const handleSubmit = async (e) => {
         const response = await axios.post('/api/admin/addEvent', eventData, {
             withCredentials: true
         });
+        
         console.log(response.data);
         alert('Event created successfully');
     } catch (error) {
